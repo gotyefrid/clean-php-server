@@ -1,0 +1,27 @@
+version: '3'
+services:
+  php:
+    image: php:8.1-fpm
+    container_name: php
+    build:
+      context: .
+      dockerfile: ./php/Dockerfile
+    working_dir: /var/www
+    volumes:
+      - ${LOCAL_FOLDER}:/var/www
+    networks:
+      - backend
+
+  nginx:
+    image: nginx:stable-alpine
+    container_name: webserver
+    ports:
+      - "3333:80"
+    volumes:
+      - ${LOCAL_FOLDER}:/var/www
+      - ./nginx/:/etc/nginx/conf.d
+    networks:
+      - backend
+
+networks:
+  backend:
